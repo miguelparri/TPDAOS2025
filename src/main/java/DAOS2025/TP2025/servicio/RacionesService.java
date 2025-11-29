@@ -17,39 +17,45 @@ public class RacionesService {
 
     private final RacionesRepository racionesRepository;
 
-    // ----------------------------------------------------
-    // Crear
-    // ----------------------------------------------------
-    public Raciones guardar(Raciones r) {
+
+    public Raciones crear(Raciones r) {
 
         validarRacion(r);
 
-        // Regla del enunciado:
-        // stockRestante = stockPreparado al crear
+        
         r.setStockRestante(r.getStockPreparado());
 
         return racionesRepository.save(r);
     }
 
-    // ----------------------------------------------------
-    // Listar
-    // ----------------------------------------------------
+    
+    public Raciones actualizar(Raciones existente, Raciones cambios) {
+
+        validarRacion(cambios);
+
+        existente.setStockPreparado(cambios.getStockPreparado());
+        existente.setFechaPreparacion(cambios.getFechaPreparacion());
+        existente.setFechaVencimiento(cambios.getFechaVencimiento());
+        existente.setRecetaid(cambios.getRecetaid());
+
+   
+
+        return racionesRepository.save(existente);
+    }
+
+    
     public List<Raciones> listar() {
         return racionesRepository.findAll();
     }
 
-    // ----------------------------------------------------
-    // Buscar
-    // ----------------------------------------------------
+   
     public Raciones buscarPorId(Long id) {
         return racionesRepository.findById(id)
                 .orElseThrow(() ->
                         new EntidadNoEncontradaExcepcion("No existe una ración con id: " + id));
     }
 
-    // ----------------------------------------------------
-    // Eliminar
-    // ----------------------------------------------------
+   
     public void eliminar(Long id) {
         if (!racionesRepository.existsById(id)) {
             throw new EntidadNoEncontradaExcepcion("No existe la ración a eliminar con id: " + id);
@@ -57,9 +63,7 @@ public class RacionesService {
         racionesRepository.deleteById(id);
     }
 
-    // ----------------------------------------------------
-    // Validaciones
-    // ----------------------------------------------------
+  
     private void validarRacion(Raciones r) {
 
         if (r.getStockPreparado() == null || r.getStockPreparado() < 0) {
@@ -73,7 +77,7 @@ public class RacionesService {
         LocalDate fechaPrep = validarFecha(r.getFechaPreparacion(), "fecha de preparación");
         LocalDate fechaVenc = validarFecha(r.getFechaVencimiento(), "fecha de vencimiento");
 
-        // Validación que te faltaba:
+        
         if (!fechaVenc.isAfter(fechaPrep)) {
             throw new ValidacionExcepcion("La fecha de vencimiento debe ser posterior a la fecha de preparación.");
         }

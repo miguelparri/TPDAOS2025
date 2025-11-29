@@ -4,44 +4,42 @@
  */
 package DAOS2025.TP2025.presentacion;
 
-import DAOS2025.TP2025.entidades.Raciones;
-import DAOS2025.TP2025.servicio.RacionesService;
+import DAOS2025.TP2025.entidades.Asistidos;
+import DAOS2025.TP2025.servicio.AsistidosService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/raciones")
+@RequestMapping("/asistidos")
 @RequiredArgsConstructor
-public class RacionesController {
+public class AsistidosController {
 
-    private final RacionesService service;
+    private final AsistidosService service;
 
     @PostMapping
-    public Raciones crear(@RequestBody Raciones r) {
-        return service.crear(r);
+    public Asistidos crear(@RequestBody Asistidos a) {
+        return service.crear(a);
     }
 
     @GetMapping
-    public List<Raciones> listar() {
+    public List<Asistidos> listar() {
         return service.listar();
     }
 
     @GetMapping("/{id}")
-    public Raciones obtener(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public Asistidos obtener(@PathVariable Long id) {
+        return service.obtener(id);
+    }
+
+    @PutMapping("/{id}")
+    public Asistidos actualizar(@PathVariable Long id, @RequestBody Asistidos a) {
+        return service.actualizar(id, a);
     }
 
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         service.eliminar(id);
     }
-
-    @PutMapping("/{id}")
-    public Raciones actualizar(@PathVariable Long id, @RequestBody Raciones r) {
-        Raciones existente = service.buscarPorId(id);
-        return service.actualizar(existente, r);
-    }
 }
-
