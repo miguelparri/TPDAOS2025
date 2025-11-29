@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RacionesRepository extends JpaRepository<Raciones, Long> {
 
-    // Ejemplo: buscar por recetaid
+
     List<Raciones> findByRecetaid(Long recetaid);
 
-    // Ejemplo: buscar por fecha de preparación
+  
     List<Raciones> findByFechaPreparacion(String fechaPreparacion);
 }
